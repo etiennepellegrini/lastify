@@ -59,7 +59,7 @@ def get_config_path() -> Path:
     Returns:
         Path to the config file
     """
-    config_dir = Path.home() / ".lastify"
+    config_dir = Path.home() / ".config/lastify"
     config_dir.mkdir(exist_ok=True)
 
     return config_dir / "config.json"
