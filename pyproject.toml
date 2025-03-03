@@ -1,0 +1,38 @@
+[tool.poetry]
+name = "lastify"
+version = "0.1.0"
+description = "Follow your most-listened Last.fm artists on Spotify"
+authors = ["Your Name <your.email@example.com>"]
+readme = "README.md"
+packages = [{include = "lastify"}]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+pylast = "^5.2.0"
+spotipy = "^2.23.0"
+click = "^8.1.7"
+python-dateutil = "^2.8.2"
+fuzzywuzzy = "^0.18.0"
+python-Levenshtein = "^0.21.1"
+rich = "^13.6.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.4.0"
+black = "^23.9.1"
+isort = "^5.12.0"
+pytest-cov = "^4.1.0"
+
+[tool.poetry.scripts]
+lastify = "lastify.cli:main"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 88
+target-version = ["py38"]
+
+[tool.isort]
+profile = "black"
+line_length = 88
