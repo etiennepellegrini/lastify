@@ -4,7 +4,7 @@ import logging
 from typing import Dict, List, Optional, Tuple, Any
 
 import spotipy
-from fuzzywuzzy import fuzz, process
+from thefuzz import fuzz, process
 from spotipy.oauth2 import SpotifyOAuth
 
 logger = logging.getLogger(__name__)

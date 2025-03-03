@@ -18,8 +18,9 @@ A Python CLI tool to follow your most-listened Last.fm artists on Spotify.
 
 ## Installation
 
-### Using Poetry (recommended)
+See [INSTALL.md](INSTALL.md) for detailed installation instructions and troubleshooting.
 
+Quick start:
 ```bash
 # Clone the repository
 git clone https://github.com/yourusername/lastify.git
@@ -32,31 +33,9 @@ poetry install
 poetry run lastify --help
 ```
 
-### Using pip
+## Development
 
-```bash
-# Install from PyPI
-pip install lastify
-
-# Run the tool
-lastify --help
-```
-
-## API Keys
-
-You'll need API keys for both Last.fm and Spotify:
-
-### Last.fm API
-
-1. Create a Last.fm API account at https://www.last.fm/api/account/create
-2. Note down your API key and API secret
-
-### Spotify API
-
-1. Go to the Spotify Developer Dashboard at https://developer.spotify.com/dashboard/
-2. Create a new application
-3. Set a redirect URI (e.g., `http://localhost:8888/callback`)
-4. Note down your client ID and client secret
+If you're interested in contributing to this project, please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines and development setup instructions.
 
 ## Usage
 
@@ -86,7 +65,7 @@ lastify --username your_lastfm_username --threshold 10 --dry-run
 lastify --username your_lastfm_username --threshold 10 --verbose
 ```
 
-### Full Command Options
+### Command Options
 
 ```
 Usage: lastify [OPTIONS]
@@ -164,32 +143,14 @@ lastify --username your_lastfm_username --threshold 10 --dry-run --verbose
 lastify --username your_lastfm_username --threshold 3 --last "30 days" --limit-artists 15
 ```
 
-## Development
-
-### Setup Development Environment
-
-```bash
-# Clone the repository
-git clone https://github.com/yourusername/lastify.git
-cd lastify
-
-# Install development dependencies
-poetry install
-
-# Run tests
-poetry run pytest
-
-# Format code
-poetry run black lastify tests
-poetry run isort lastify tests
-```
-
-### Project Structure
+## Project Structure
 
 ```
 lastify/
 ├── pyproject.toml         # Poetry configuration
 ├── README.md              # This file
+├── INSTALL.md             # Installation instructions
+├── CONTRIBUTING.md        # Development and contribution guidelines
 ├── lastify/
 │   ├── __init__.py        # Package initialization
 │   ├── cli.py             # Command-line interface
