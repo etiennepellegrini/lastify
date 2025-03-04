@@ -15,14 +15,41 @@ def setup_logging(verbose: bool = False) -> None:
     Args:
         verbose: Whether to enable verbose logging
     """
-    level = logging.DEBUG if verbose else logging.INFO
+    # Configure log levels
+    root_level = logging.INFO if verbose else logging.WARNING
+    app_level = logging.DEBUG if verbose else logging.INFO
 
     # Configure the root logger
     logging.basicConfig(
-        level=level,
+        level=root_level,
         format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
         datefmt="%Y-%m-%d %H:%M:%S",
     )
+
+    # Set up app-specific loggers
+    app_logger = logging.getLogger("lastify")
+    app_logger.setLevel(app_level)
+
+    # Restrict verbose output from external libraries
+    logging.getLogger("pylast").setLevel(logging.WARNING)
+    logging.getLogger("httpx").setLevel(logging.WARNING)
+    logging.getLogger("urllib3").setLevel(logging.WARNING)
+    logging.getLogger("spotipy").setLevel(logging.WARNING)
+
+    # Add a console handler for colorized output if available
+    if verbose:
+        try:
+            import rich.logging
+            console_handler = rich.logging.RichHandler(
+                rich_tracebacks=True,
+                markup=True,
+                show_time=False,
+                show_path=False,
+            )
+            app_logger.handlers = []  # Remove any existing handlers
+            app_logger.addHandler(console_handler)
+        except ImportError:
+            pass  # Fall back to basic logging if rich isn't available
 
 
 def get_config_path() -> Path:
