@@ -207,16 +207,15 @@ def main(
         f"[green]Found {len(artists)} artists with at least {threshold} plays[/green]"
     )
 
-    if verbose:
-        # Display artists in a table
-        table = Table(title=f"Artists with at least {threshold} plays")
-        table.add_column("Artist", style="cyan")
-        table.add_column("Plays", justify="right", style="green")
+    # Display artists in a table
+    table = Table(title=f"Artists with at least {threshold} plays")
+    table.add_column("Artist", style="cyan")
+    table.add_column("Plays", justify="right", style="green")
 
-        for artist_name, play_count in artists:
-            table.add_row(artist_name, str(play_count))
+    for artist_name, play_count in artists:
+        table.add_row(artist_name, str(play_count))
 
-        console.print(table)
+    console.print(table)
 
     # Follow artists on Spotify
     console.print(
