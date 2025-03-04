@@ -49,6 +49,12 @@ console = Console()
 @click.option("--dry-run", is_flag=True, help="Test without actually following artists")
 @click.option("--show-progress", is_flag=True, help="Show progress bars for long operations")
 @click.option(
+    "--top",
+    type=int,
+    default=None,
+    help="Use top N artists from Last.fm instead of counting plays",
+)
+@click.option(
     "--lastfm-api-key",
     help="Last.fm API key (will be saved for future use)",
 )
@@ -78,6 +84,7 @@ def main(
     verbose: bool,
     dry_run: bool,
     show_progress: bool,
+    top: Optional[int],
     lastfm_api_key: Optional[str],
     lastfm_api_secret: Optional[str],
     spotify_client_id: Optional[str],
@@ -87,15 +94,21 @@ def main(
     """Follow your most listened to Last.fm artists on Spotify.
 
     Example usage:
-    \b
+
     # Follow all artists with at least 50 plays
     lastify --username your_lastfm_username --threshold 50
-    \b
+
     # Follow up to 10 artists with at least 20 plays in the last 60 days
     lastify --username your_lastfm_username --threshold 20 --last "60 days" --limit-artists 10
-    \b
+
     # Dry run with fuzzy matching and verbose output
     lastify --username your_lastfm_username --threshold 30 --match-mode fuzzy --verbose --dry-run
+
+    # Follow your top 50 artists from Last.fm (faster method)
+    lastify --username your_lastfm_username --top 50
+
+    # Follow your top 20 artists from the last month with a minimum of 5 plays
+    lastify --username your_lastfm_username --top 20 --last "1 month" --threshold 5
     """
     # Setup logging
     setup_logging(verbose)
@@ -110,6 +123,8 @@ def main(
         console.print(f"  Verbose: {verbose}")
         console.print(f"  Dry run: {dry_run}")
         console.print(f"  Show progress: {show_progress}")
+        if top:
+            console.print(f"  Top artists: {top}")
 
     # Save API configurations if provided
     if lastfm_api_key or lastfm_api_secret:
@@ -171,7 +186,7 @@ def main(
     # Get artists by play count
     console.print(f"[bold]Getting artists with at least {threshold} plays...[/bold]")
     try:
-        artists = lastfm_client.get_artists_by_playcount(threshold, last, show_progress=show_progress)
+        artists = lastfm_client.get_artists_by_playcount(threshold, last, show_progress=show_progress, top_n=top)
     except Exception as e:
         console.print(f"[red]Failed to get artists: {str(e)}[/red]")
         sys.exit(1)
