@@ -1,11 +1,11 @@
 """Spotify API client for searching and following artists."""
 
 import logging
-from typing import Dict, List, Optional, Tuple, Any
+from typing import Any, Dict, List, Optional, Tuple
 
 import spotipy
-from thefuzz import fuzz, process
 from spotipy.oauth2 import SpotifyOAuth
+from thefuzz import fuzz, process
 
 logger = logging.getLogger(__name__)
 

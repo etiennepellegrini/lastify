@@ -1,16 +1,16 @@
 """Last.fm API client for retrieving artist statistics."""
 
 import logging
-from datetime import datetime, timedelta
-from typing import Dict, List, Optional, Tuple, Any
 import math
+from datetime import datetime, timedelta
+from typing import Any, Dict, List, Optional, Tuple
 
 import pylast
 from dateutil import parser
 from rich.progress import (
+    BarColumn,
     Progress,
     TextColumn,
-    BarColumn,
     TimeElapsedColumn,
     TimeRemainingColumn,
 )
