@@ -47,7 +47,9 @@ console = Console()
 )
 @click.option("--verbose", is_flag=True, help="Enable verbose output")
 @click.option("--dry-run", is_flag=True, help="Test without actually following artists")
-@click.option("--show-progress", is_flag=True, help="Show progress bars for long operations")
+@click.option(
+    "--show-progress", is_flag=True, help="Show progress bars for long operations"
+)
 @click.option(
     "--top",
     type=int,
@@ -133,7 +135,9 @@ def main(
             console.print("[green]Saved Last.fm API configuration[/green]")
 
     if spotify_client_id or spotify_client_secret or spotify_redirect_uri:
-        save_spotify_config(spotify_client_id, spotify_client_secret, spotify_redirect_uri)
+        save_spotify_config(
+            spotify_client_id, spotify_client_secret, spotify_redirect_uri
+        )
         if verbose:
             console.print("[green]Saved Spotify API configuration[/green]")
 
@@ -186,16 +190,22 @@ def main(
     # Get artists by play count
     console.print(f"[bold]Getting artists with at least {threshold} plays...[/bold]")
     try:
-        artists = lastfm_client.get_artists_by_playcount(threshold, last, show_progress=show_progress, top_n=top)
+        artists = lastfm_client.get_artists_by_playcount(
+            threshold, last, show_progress=show_progress, top_n=top
+        )
     except Exception as e:
         console.print(f"[red]Failed to get artists: {str(e)}[/red]")
         sys.exit(1)
 
     if not artists:
-        console.print(f"[yellow]No artists found with at least {threshold} plays[/yellow]")
+        console.print(
+            f"[yellow]No artists found with at least {threshold} plays[/yellow]"
+        )
         sys.exit(0)
 
-    console.print(f"[green]Found {len(artists)} artists with at least {threshold} plays[/green]")
+    console.print(
+        f"[green]Found {len(artists)} artists with at least {threshold} plays[/green]"
+    )
 
     if verbose:
         # Display artists in a table
@@ -221,22 +231,30 @@ def main(
 
     # Print results
     if results["followed"]:
-        console.print(f"[green]Successfully followed {len(results['followed'])} artists:[/green]")
+        console.print(
+            f"[green]Successfully followed {len(results['followed'])} artists:[/green]"
+        )
         for artist, play_count in results["followed"]:
             console.print(f"  ✓ {artist} ({play_count} plays)")
 
     if results["skipped"]:
-        console.print(f"[blue]Skipped {len(results['skipped'])} artists (dry run):[/blue]")
+        console.print(
+            f"[blue]Skipped {len(results['skipped'])} artists (dry run):[/blue]"
+        )
         for artist, play_count in results["skipped"]:
             console.print(f"  ⏩ {artist} ({play_count} plays)")
 
     if results["failed_to_match"]:
-        console.print(f"[yellow]Failed to match {len(results['failed_to_match'])} artists:[/yellow]")
+        console.print(
+            f"[yellow]Failed to match {len(results['failed_to_match'])} artists:[/yellow]"
+        )
         for artist, play_count in results["failed_to_match"]:
             console.print(f"  ❓ {artist} ({play_count} plays)")
 
     if results["failed_to_follow"]:
-        console.print(f"[red]Failed to follow {len(results['failed_to_follow'])} artists:[/red]")
+        console.print(
+            f"[red]Failed to follow {len(results['failed_to_follow'])} artists:[/red]"
+        )
         for artist, play_count in results["failed_to_follow"]:
             console.print(f"  ❌ {artist} ({play_count} plays)")
 

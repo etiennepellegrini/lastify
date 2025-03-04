@@ -7,7 +7,13 @@ import math
 
 import pylast
 from dateutil import parser
-from rich.progress import Progress, TextColumn, BarColumn, TimeElapsedColumn, TimeRemainingColumn
+from rich.progress import (
+    Progress,
+    TextColumn,
+    BarColumn,
+    TimeElapsedColumn,
+    TimeRemainingColumn,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -43,7 +49,7 @@ class LastFMClient:
         limit: Optional[int] = None,
         time_from: Optional[int] = None,
         time_to: Optional[int] = None,
-        show_progress: bool = False
+        show_progress: bool = False,
     ) -> List[pylast.PlayedTrack]:
         """Get recent tracks for the user with date filtering.
 
@@ -57,10 +63,20 @@ class LastFMClient:
             List of played tracks
         """
         if self.verbose:
-            from_str = f"from {datetime.fromtimestamp(time_from).strftime('%Y-%m-%d')}" if time_from else ""
-            to_str = f"to {datetime.fromtimestamp(time_to).strftime('%Y-%m-%d')}" if time_to else ""
+            from_str = (
+                f"from {datetime.fromtimestamp(time_from).strftime('%Y-%m-%d')}"
+                if time_from
+                else ""
+            )
+            to_str = (
+                f"to {datetime.fromtimestamp(time_to).strftime('%Y-%m-%d')}"
+                if time_to
+                else ""
+            )
             date_range = f" ({from_str} {to_str})".strip() if from_str or to_str else ""
-            logger.info(f"Fetching recent tracks{date_range} (limit: {limit if limit else 'all'})")
+            logger.info(
+                f"Fetching recent tracks{date_range} (limit: {limit if limit else 'all'})"
+            )
 
         try:
             # pylast doesn't directly support pagination through the get_recent_tracks method
@@ -69,19 +85,19 @@ class LastFMClient:
 
             # Set limit parameter
             if limit is not None:
-                kwargs['limit'] = limit
+                kwargs["limit"] = limit
             else:
                 # Use a reasonable default if no limit specified
-                kwargs['limit'] = 1000
+                kwargs["limit"] = 1000
 
             # Set date range parameters - pylast uses different parameter names
             # than what the Last.fm API documentation shows
             if time_from is not None:
                 # Try different parameter variations since pylast isn't consistent
-                kwargs['time_from'] = time_from
+                kwargs["time_from"] = time_from
 
             if time_to is not None:
-                kwargs['time_to'] = time_to
+                kwargs["time_to"] = time_to
 
             # Simple single request approach - pylast handles pagination internally
             tracks = self.user.get_recent_tracks(**kwargs)
@@ -120,7 +136,7 @@ class LastFMClient:
         self,
         start_date: datetime,
         end_date: Optional[datetime] = None,
-        show_progress: bool = False
+        show_progress: bool = False,
     ) -> List[pylast.PlayedTrack]:
         """Get all tracks between two dates.
 
@@ -136,7 +152,9 @@ class LastFMClient:
             end_date = datetime.now()
 
         if self.verbose:
-            logger.info(f"Fetching tracks from {start_date.strftime('%Y-%m-%d')} to {end_date.strftime('%Y-%m-%d')}")
+            logger.info(
+                f"Fetching tracks from {start_date.strftime('%Y-%m-%d')} to {end_date.strftime('%Y-%m-%d')}"
+            )
 
         # Convert dates to timestamps
         time_from = int(start_date.timestamp())
@@ -144,15 +162,11 @@ class LastFMClient:
 
         # Get tracks with date filtering
         return self.get_recent_tracks(
-            time_from=time_from,
-            time_to=time_to,
-            show_progress=show_progress
+            time_from=time_from, time_to=time_to, show_progress=show_progress
         )
 
     def get_artists_from_tracks(
-        self,
-        tracks: List[pylast.PlayedTrack],
-        threshold: int = 1
+        self, tracks: List[pylast.PlayedTrack], threshold: int = 1
     ) -> List[Tuple[str, int]]:
         """Count artist plays from a list of tracks.
 
@@ -171,7 +185,8 @@ class LastFMClient:
 
         # Filter by threshold
         filtered_artists = [
-            (artist, count) for artist, count in artist_counts.items()
+            (artist, count)
+            for artist, count in artist_counts.items()
             if count >= threshold
         ]
 
@@ -197,8 +212,7 @@ class LastFMClient:
 
         # Convert to our standard format of (artist_name, play_count)
         artist_playcounts = [
-            (artist.item.name, int(artist.weight))
-            for artist in top_artists
+            (artist.item.name, int(artist.weight)) for artist in top_artists
         ]
 
         if self.verbose:
@@ -253,7 +267,7 @@ class LastFMClient:
         threshold: int,
         time_filter: Optional[str] = None,
         show_progress: bool = False,
-        top_n: Optional[int] = None
+        top_n: Optional[int] = None,
     ) -> List[Tuple[str, int]]:
         """Get artists with play counts above the threshold or top N artists.
 
@@ -325,8 +339,7 @@ class LastFMClient:
 
             # Get tracks in date range
             tracks = self.get_tracks_by_date_range(
-                start_date=since_date,
-                show_progress=show_progress
+                start_date=since_date, show_progress=show_progress
             )
 
             # Count artists from these tracks

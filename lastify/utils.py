@@ -40,6 +40,7 @@ def setup_logging(verbose: bool = False) -> None:
     if verbose:
         try:
             import rich.logging
+
             console_handler = rich.logging.RichHandler(
                 rich_tracebacks=True,
                 markup=True,

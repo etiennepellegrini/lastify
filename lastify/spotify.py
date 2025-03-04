@@ -41,7 +41,9 @@ class SpotifyClient:
 
         if verbose:
             user_info = self.sp.current_user()
-            logger.info(f"Initialized Spotify client for user: {user_info['display_name']}")
+            logger.info(
+                f"Initialized Spotify client for user: {user_info['display_name']}"
+            )
 
     def search_artist(self, artist_name: str) -> Optional[Dict[str, Any]]:
         """Search for an artist on Spotify.
@@ -66,7 +68,9 @@ class SpotifyClient:
 
         return artist
 
-    def fuzzy_search_artist(self, artist_name: str, threshold: int = 80) -> Optional[Dict[str, Any]]:
+    def fuzzy_search_artist(
+        self, artist_name: str, threshold: int = 80
+    ) -> Optional[Dict[str, Any]]:
         """Search for an artist on Spotify using fuzzy matching.
 
         Args:
@@ -86,7 +90,9 @@ class SpotifyClient:
 
         if not results["artists"]["items"]:
             if self.verbose:
-                logger.warning(f"No fuzzy match results found for artist: {artist_name}")
+                logger.warning(
+                    f"No fuzzy match results found for artist: {artist_name}"
+                )
             return None
 
         # Get artist names from results
@@ -94,7 +100,9 @@ class SpotifyClient:
         artist_names = [artist["name"] for artist in artists]
 
         # Find best match
-        best_match, score = process.extractOne(artist_name, artist_names, scorer=fuzz.ratio)
+        best_match, score = process.extractOne(
+            artist_name, artist_names, scorer=fuzz.ratio
+        )
 
         if score < threshold:
             if self.verbose:
@@ -145,7 +153,9 @@ class SpotifyClient:
         print("Found these potential matches:")
 
         for i, artist in enumerate(artists):
-            print(f"{i+1}. {artist['name']} (Followers: {artist['followers']['total']})")
+            print(
+                f"{i+1}. {artist['name']} (Followers: {artist['followers']['total']})"
+            )
 
         print("0. None of these")
 
@@ -164,7 +174,9 @@ class SpotifyClient:
             return None
 
         selected_artist = artists[choice - 1]
-        logger.info(f"User selected '{selected_artist['name']}' for artist: {artist_name}")
+        logger.info(
+            f"User selected '{selected_artist['name']}' for artist: {artist_name}"
+        )
         return selected_artist
 
     def follow_artist(self, artist_id: str) -> bool:
@@ -181,7 +193,9 @@ class SpotifyClient:
 
             if self.verbose:
                 artist = self.sp.artist(artist_id)
-                logger.info(f"Successfully followed artist: {artist['name']} (ID: {artist_id})")
+                logger.info(
+                    f"Successfully followed artist: {artist['name']} (ID: {artist_id})"
+                )
 
             return True
         except Exception as e:
