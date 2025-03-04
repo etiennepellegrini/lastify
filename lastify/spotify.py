@@ -189,7 +189,7 @@ class SpotifyClient:
             True if successful, False otherwise
         """
         try:
-            self.sp.current_user_follow_artists([artist_id])
+            self.sp.user_follow_artists([artist_id])
 
             if self.verbose:
                 artist = self.sp.artist(artist_id)
