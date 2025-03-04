@@ -194,7 +194,7 @@ class SpotifyClient:
         match_mode: str = "strict",
         dry_run: bool = False,
         limit: Optional[int] = None,
-    ) -> Dict[str, List[str]]:
+    ) -> Dict[str, List]:
         """Follow multiple artists on Spotify.
 
         Args:
@@ -241,21 +241,21 @@ class SpotifyClient:
 
             # If no match found, add to failed list
             if not artist:
-                results["failed_to_match"].append(artist_name)
+                results["failed_to_match"].append((artist_name, play_count))
                 continue
 
             # Follow the artist if not in dry run mode
             if not dry_run:
                 success = self.follow_artist(artist["id"])
                 if success:
-                    results["followed"].append(artist["name"])
+                    results["followed"].append((artist["name"], play_count))
                 else:
-                    results["failed_to_follow"].append(artist["name"])
+                    results["failed_to_follow"].append((artist_name, play_count))
             else:
                 if self.verbose:
                     logger.info(
                         f"[DRY RUN] Would follow artist: {artist['name']} (ID: {artist['id']})"
                     )
-                results["skipped"].append(artist["name"])
+                results["skipped"].append((artist["name"], play_count))
 
         return results

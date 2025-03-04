@@ -204,23 +204,23 @@ def main(
     # Print results
     if results["followed"]:
         console.print(f"[green]Successfully followed {len(results['followed'])} artists:[/green]")
-        for artist in results["followed"]:
-            console.print(f"  ✓ {artist}")
+        for artist, play_count in results["followed"]:
+            console.print(f"  ✓ {artist} ({play_count} plays)")
 
     if results["skipped"]:
         console.print(f"[blue]Skipped {len(results['skipped'])} artists (dry run):[/blue]")
-        for artist in results["skipped"]:
-            console.print(f"  ⏩ {artist}")
+        for artist, play_count in results["skipped"]:
+            console.print(f"  ⏩ {artist} ({play_count} plays)")
 
     if results["failed_to_match"]:
         console.print(f"[yellow]Failed to match {len(results['failed_to_match'])} artists:[/yellow]")
-        for artist in results["failed_to_match"]:
-            console.print(f"  ❓ {artist}")
+        for artist, play_count in results["failed_to_match"]:
+            console.print(f"  ❓ {artist} ({play_count} plays)")
 
     if results["failed_to_follow"]:
         console.print(f"[red]Failed to follow {len(results['failed_to_follow'])} artists:[/red]")
-        for artist in results["failed_to_follow"]:
-            console.print(f"  ❌ {artist}")
+        for artist, play_count in results["failed_to_follow"]:
+            console.print(f"  ❌ {artist} ({play_count} plays)")
 
     console.print("[bold green]Done![/bold green]")
 
