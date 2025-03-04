@@ -47,6 +47,7 @@ console = Console()
 )
 @click.option("--verbose", is_flag=True, help="Enable verbose output")
 @click.option("--dry-run", is_flag=True, help="Test without actually following artists")
+@click.option("--show-progress", is_flag=True, help="Show progress bars for long operations")
 @click.option(
     "--lastfm-api-key",
     help="Last.fm API key (will be saved for future use)",
@@ -76,6 +77,7 @@ def main(
     match_mode: str,
     verbose: bool,
     dry_run: bool,
+    show_progress: bool,
     lastfm_api_key: Optional[str],
     lastfm_api_secret: Optional[str],
     spotify_client_id: Optional[str],
@@ -107,6 +109,7 @@ def main(
         console.print(f"  Match mode: {match_mode}")
         console.print(f"  Verbose: {verbose}")
         console.print(f"  Dry run: {dry_run}")
+        console.print(f"  Show progress: {show_progress}")
 
     # Save API configurations if provided
     if lastfm_api_key or lastfm_api_secret:
@@ -168,7 +171,7 @@ def main(
     # Get artists by play count
     console.print(f"[bold]Getting artists with at least {threshold} plays...[/bold]")
     try:
-        artists = lastfm_client.get_artists_by_playcount(threshold, last)
+        artists = lastfm_client.get_artists_by_playcount(threshold, last, show_progress=show_progress)
     except Exception as e:
         console.print(f"[red]Failed to get artists: {str(e)}[/red]")
         sys.exit(1)
