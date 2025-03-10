@@ -236,6 +236,13 @@ def main(
         for artist, play_count in results["followed"]:
             console.print(f"  ✓ {artist} ({play_count} plays)")
 
+    if results["already_followed"]:
+        console.print(
+            f"[blue]Skipped {len(results['already_followed'])} artists (already followed):[/blue]"
+        )
+        for artist, play_count in results["already_followed"]:
+            console.print(f"  ⏩ {artist} ({play_count} plays)")
+
     if results["skipped"]:
         console.print(
             f"[blue]Skipped {len(results['skipped'])} artists (dry run):[/blue]"

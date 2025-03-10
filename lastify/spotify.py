@@ -28,7 +28,7 @@ class SpotifyClient:
             redirect_uri: Redirect URI for authentication
             verbose: Whether to enable verbose logging
         """
-        scope = "user-follow-modify"
+        scope = "user-follow-read user-follow-modify"
         self.sp = spotipy.Spotify(
             auth_manager=SpotifyOAuth(
                 client_id=client_id,
@@ -225,6 +225,7 @@ class SpotifyClient:
             "failed_to_match": [],
             "failed_to_follow": [],
             "skipped": [],
+            "already_followed": [],
         }
 
         # Limit number of artists if specified
@@ -256,6 +257,12 @@ class SpotifyClient:
             # If no match found, add to failed list
             if not artist:
                 results["failed_to_match"].append((artist_name, play_count))
+                continue
+
+            # Check if artists is already followed
+            follow = self.sp.current_user_following_artists([artist["id"]])
+            if follow:
+                results["already_followed"].append((artist["name"], play_count))
                 continue
 
             # Follow the artist if not in dry run mode
